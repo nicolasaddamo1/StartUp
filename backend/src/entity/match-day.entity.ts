@@ -6,7 +6,7 @@ export class Matchday {
     id: string;
 
     @Column()
-    number: number; // Fecha 1, 2, 3...
+    number: number;
 
     @Column({ type: 'date' })
     startDate: Date;
