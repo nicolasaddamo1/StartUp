@@ -4,9 +4,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { CreatePointDto } from './dto/create-point.dto';
 import { UpdatePointDto } from './dto/update-point.dto';
-import { Point } from './entities/point.entity';
-import { Player } from '../players/entities/player.entity';
-import { Match } from '../matches/entities/match.entity';
+import { Point } from 'src/entity/points.entity';
 
 @Injectable()
 export class PointsService {
