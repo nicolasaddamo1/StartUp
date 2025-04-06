@@ -1,13 +1,12 @@
-// src/modules/points/points.module.ts
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { PointsService } from './points.service';
-import { PointsController } from './points.controller';
-import { Point } from 'src/entity/points.entity';
+import { Player } from './entities/player.entity';
+import { PlayersService } from './players.service';
+import { PlayersController } from './players.controller';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([Point])],
-  controllers: [PointsController],
-  providers: [PointsService],
+  imports: [TypeOrmModule.forFeature([Player])],
+  controllers: [PlayersController],
+  providers: [PlayersService],
 })
-export class PointsModule { }
+export class PlayersModule { }
