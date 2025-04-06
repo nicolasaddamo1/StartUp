@@ -1,37 +1,40 @@
+// src/modules/points/points.service.ts
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
+import { CreatePointDto } from './dto/create-point.dto';
+import { UpdatePointDto } from './dto/update-point.dto';
+import { Point } from 'src/entity/points.entity';
 
 @Injectable()
-export class PlayersService {
+export class PointsService {
     constructor(
-        @InjectRepository(Player)
-        private readonly playerRepo: Repository<Player>,
-        @InjectRepository(Team)
-        private readonly teamRepo: Repository<Team>
+        @InjectRepository(Point)
+        private pointRepository: Repository<Point>,
     ) { }
 
-    async create(dto: CreatePlayerDto): Promise<Player> {
-        const team = await this.teamRepo.findOneBy({ id: dto.teamId });
-        const player = this.playerRepo.create({ ...dto, team });
-        return this.playerRepo.save(player);
+    create(createPointDto: CreatePointDto) {
+        return this.pointRepository.save(createPointDto);
     }
 
-    findAll(): Promise<Player[]> {
-        return this.playerRepo.find({ relations: ['team'] });
+    findAll() {
+        return this.pointRepository.find({
+            relations: ['player', 'match'],
+        });
     }
 
-    findOne(id: string): Promise<Player> {
-        return this.playerRepo.findOne({ where: { id }, relations: ['team'] });
+    findOne(id: string) {
+        return this.pointRepository.findOne({
+            where: { id },
+            relations: ['player', 'match'],
+        });
     }
 
-    async update(id: string, dto: UpdatePlayerDto): Promise<Player> {
-        const player = await this.playerRepo.findOneBy({ id });
-        Object.assign(player, dto);
-        return this.playerRepo.save(player);
+    update(id: string, updatePointDto: UpdatePointDto) {
+        return this.pointRepository.update(id, updatePointDto);
     }
 
-    async remove(id: string): Promise<void> {
-        await this.playerRepo.delete(id);
+    remove(id: string) {
+        return this.pointRepository.delete(id);
     }
 }
