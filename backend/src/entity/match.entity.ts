@@ -23,7 +23,7 @@ export class Match {
     @Column({ nullable: true })
     awayScore: number;
 
-    @ManyToOne(() => League, { nullable: true }) // Opcional
+    @ManyToOne(() => League, { nullable: true })
     league: League;
 
     @CreateDateColumn()
