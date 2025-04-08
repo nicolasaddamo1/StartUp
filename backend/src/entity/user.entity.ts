@@ -1,3 +1,5 @@
+import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, OneToMany } from 'typeorm';
+
 export class Usuario {
     @PrimaryGeneratedColumn('uuid')
     id: string;
