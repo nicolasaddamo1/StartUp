@@ -1,28 +1,43 @@
-import { Column, JoinColumn, ManyToOne, PrimaryColumn } from "typeorm";
-import { Usuario } from "./user.entity";
-import { Torneo } from "./tournaments.entity";
+import { Column, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
+import { Fecha } from "./fecha.entity";
 
-export class UsuarioTorneo {
-    @PrimaryColumn()
-    usuario_id: string;
+export enum EstadoPartido {
+    PROGRAMADO = 'programado',
+    EN_JUEGO = 'en_juego',
+    FINALIZADO = 'finalizado',
+    CANCELADO = 'cancelado',
+    SUSPENDIDO = 'suspendido'
+  }
+  
+  export class Partido {
+    @PrimaryGeneratedColumn('uuid')
+    id: string;
     
-    @PrimaryColumn()
-    torneo_id: string;
+    @Column({ length: 100 })
+    equipo_local: string;
     
-    @Column({ type: 'enum', enum: ['admin', 'participante', 'observador'], default: 'participante' })
-    rol: string;
+    @Column({ length: 100 })
+    equipo_visitante: string;
     
-    @Column({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
-    fecha_inscripcion: Date;
+    @Column({ nullable: true })
+    goles_local: number;
     
-    @Column({ default: false })
-    pago_confirmado: boolean;
+    @Column({ nullable: true })
+    goles_visitante: number;
     
-    @ManyToOne(() => Usuario)
-    @JoinColumn({ name: 'usuario_id' })
-    usuario: Usuario;
+    @Column({ type: 'timestamp' })
+    fecha_hora: Date;
     
-    @ManyToOne(() => Torneo)
-    @JoinColumn({ name: 'torneo_id' })
-    torneo: Torneo;
+    @Column({ length: 100, nullable: true })
+    estadio: string;
+    
+    @Column({ type: 'enum', enum: EstadoPartido, default: EstadoPartido.PROGRAMADO })
+    estado: EstadoPartido;
+    
+    @ManyToOne(() => Fecha, fecha => fecha.partidos)
+    @JoinColumn({ name: 'fecha_id' })
+    fecha: Fecha;
+    
+    @Column()
+    fecha_id: string;
   }
