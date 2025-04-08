@@ -1,5 +1,6 @@
 import { Column, JoinTable, ManyToMany, OneToMany, PrimaryGeneratedColumn } from "typeorm";
 import { Equipo } from "./team.entity";
+import { Fecha } from "./fecha.entity";
 
 export enum TipoTorneo {
     FREE = 'free',
