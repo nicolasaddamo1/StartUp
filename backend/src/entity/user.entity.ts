@@ -1,4 +1,7 @@
-import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, OneToMany } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, OneToMany, ManyToMany, JoinTable } from 'typeorm';
+import { Equipo } from './team.entity';
+import { Transaccion } from './transactions.entity';
+import { Torneo } from './tournaments.entity';
 
 export class Usuario {
     @PrimaryGeneratedColumn('uuid')
