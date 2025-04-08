@@ -1,14 +1,17 @@
-import { IsNotEmpty, IsUUID, IsString, IsInt, Min } from 'class-validator';
+// dto/create-usuario.dto.ts
+import { ApiProperty } from '@nestjs/swagger';
+import { IsEmail, IsNotEmpty, MinLength } from 'class-validator';
 
-export class CreateUserTeamDto {
-    @IsUUID()
-    userId: string;
+export class CreateUsuarioDto {
+    @ApiProperty({ example: 'Usuario Ejemplo' })
+    @IsNotEmpty({ message: 'El nombre es requerido' })
+    nombre: string;
 
-    @IsString()
-    @IsNotEmpty()
-    teamName: string;
+    @ApiProperty({ example: 'usuario@ejemplo.com' })
+    @IsEmail({}, { message: 'El email debe ser válido' })
+    email: string;
 
-    @IsInt()
-    @Min(0)
-    budget: number;
+    @ApiProperty({ example: 'Contraseña123!' })
+    @MinLength(6, { message: 'La contraseña debe tener al menos 6 caracteres' })
+    password: string;
 }
