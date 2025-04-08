@@ -1,5 +1,7 @@
 import { Column, JoinColumn, ManyToOne, OneToMany, PrimaryGeneratedColumn } from "typeorm";
 import { Torneo } from "./tournaments.entity";
+import { Puntuacion } from "./points.entity";
+import { Partido } from "./match.entity";
 
 export enum EstadoFecha {
     PENDIENTE = 'pendiente',
