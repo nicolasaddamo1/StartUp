@@ -1,4 +1,5 @@
 import { Column, OneToMany, PrimaryGeneratedColumn } from "typeorm";
+import { JugadorEquipo } from "./player-team.entity";
 
 export enum Posicion {
     ARQUERO = 'arquero',
