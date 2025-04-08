@@ -1,43 +1,67 @@
-import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, OneToMany } from 'typeorm';
-import { Team } from './team.entity';
-import { UserTeamPlayer } from './user-team-player.entity';
-import { MatchResult } from './match-result.entity';
+import { Column, OneToMany, PrimaryGeneratedColumn } from "typeorm";
 
-@Entity('players')
-export class Player {
+export enum Posicion {
+    ARQUERO = 'arquero',
+    DEFENSOR = 'defensor',
+    MEDIOCAMPISTA = 'mediocampista',
+    DELANTERO = 'delantero'
+  }
+  
+  export class Jugador {
     @PrimaryGeneratedColumn('uuid')
     id: string;
-
-    @Column()
-    name: string;
-
-    @ManyToOne(() => Team, team => team.players)
-    team: Team;
-
-    @Column()
-    position: string;
-
-    @Column()
-    value: number;
-
+    
+    @Column({ length: 100 })
+    nombre: string;
+    
+    @Column({ type: 'enum', enum: Posicion })
+    posicion: Posicion;
+    
+    @Column({ length: 100 })
+    equipo_real: string;
+    
+    @Column({ type: 'decimal', precision: 10, scale: 2 })
+    precio: number;
+    
+    @Column({ default: false })
+    lesionado: boolean;
+    
+    @Column({ nullable: true })
+    imagen_url: string;
+    
     @Column({ default: 0 })
-    goals: number;
-
+    goles: number;
+    
     @Column({ default: 0 })
-    assists: number;
-
-    @Column({ name: 'yellow_cards', default: 0 })
-    yellowCards: number;
-
-    @Column({ name: 'red_cards', default: 0 })
-    redCards: number;
-
-    @Column({ name: 'is_injured', default: false })
-    isInjured: boolean;
-
-    @OneToMany(() => UserTeamPlayer, utp => utp.player)
-    userTeamPlayers: UserTeamPlayer[];
-
-    @OneToMany(() => MatchResult, result => result.player)
-    matchResults: MatchResult[];
-}
+    asistencias: number;
+    
+    @Column({ default: 0 })
+    tarjetas_amarillas: number;
+    
+    @Column({ default: 0 })
+    tarjetas_rojas: number;
+    
+    @Column({ default: 0 })
+    arcos_en_cero: number;
+    
+    @Column({ default: 0 })
+    minutos_jugados: number;
+    
+    @Column({ default: 0 })
+    puntos_totales: number;
+    
+    @Column({ default: 0 })
+    penales_atajados: number;
+    
+    @Column({ default: 0 })
+    partidos_jugados: number;
+    
+    @Column({ type: 'decimal', precision: 5, scale: 2, default: 0 })
+    promedio_puntos: number;
+    
+    @OneToMany(() => JugadorEquipo, jugadorEquipo => jugadorEquipo.jugador)
+    equipos_jugador: JugadorEquipo[];
+    
+    @OneToMany(() => Puntuacion, puntuacion => puntuacion.jugador)
+    puntuaciones: Puntuacion[];
+  }
