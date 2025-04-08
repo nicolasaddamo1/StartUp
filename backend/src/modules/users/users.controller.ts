@@ -1,9 +1,9 @@
 // usuarios.controller.ts
 import { Controller, Get, Param, Patch, Delete, Body, UseGuards } from '@nestjs/common';
-import { UsuariosService } from './usuarios.service';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
-import { UpdateUsuarioDto } from './dto/update-usuario.dto';
 import { ApiTags, ApiOperation, ApiResponse, ApiBearerAuth } from '@nestjs/swagger';
+import { UsuariosService } from './users.service';
+import { UpdateUsuarioDto } from './dto/update-user-team.dto';
 
 @ApiTags('usuarios')
 @Controller('usuarios')
