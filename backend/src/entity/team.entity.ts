@@ -1,5 +1,8 @@
 import { Column, JoinColumn, JoinTable, ManyToMany, ManyToOne, OneToMany, PrimaryGeneratedColumn } from "typeorm";
 import { Usuario } from "./user.entity";
+import { Torneo } from "./tournaments.entity";
+import { JugadorEquipo } from "./player-team.entity";
+import { Jugador } from "./player.entity";
 
 export class Equipo {
     @PrimaryGeneratedColumn('uuid')
