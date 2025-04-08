@@ -1,7 +1,7 @@
 import { Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
 import { Equipo } from "./team.entity";
-import { Mercado } from "./market.entiy";
 import { Jugador } from "./player.entity";
+import { Mercado } from "./market.entity";
 
 @Entity('transferencia')
 export class Transferencia {

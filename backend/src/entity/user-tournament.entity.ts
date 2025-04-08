@@ -2,7 +2,7 @@ import { Column, Entity, JoinColumn, ManyToOne, PrimaryColumn } from "typeorm";
 import { Usuario } from "./user.entity";
 import { Torneo } from "./tournaments.entity";
 
-@Entity('usuarios_torneos')
+@Entity('usuario_torneo')
 export class UsuarioTorneo {
   @PrimaryColumn()
   usuario_id: string;

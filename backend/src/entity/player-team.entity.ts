@@ -8,7 +8,7 @@ export enum EstadoJugador {
   RESERVA = 'reserva'
 }
 
-@Entity('jugadores_equipo')
+@Entity('jugador_equipo')
 export class JugadorEquipo {
   @PrimaryColumn()
   equipo_id: string;

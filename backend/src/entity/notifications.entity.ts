@@ -9,7 +9,7 @@ export enum TipoNotificacion {
   JUGADOR = 'jugador'
 }
 
-@Entity('notificaciones')
+@Entity('notificacion')
 export class Notificacion {
   @PrimaryGeneratedColumn('uuid')
   id: string;

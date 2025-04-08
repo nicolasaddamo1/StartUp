@@ -9,7 +9,7 @@ export enum EstadoPartido {
   SUSPENDIDO = 'suspendido'
 }
 
-@Entity('partido')
+@Entity('partidos')
 export class Partido {
   @PrimaryGeneratedColumn('uuid')
   id: string;

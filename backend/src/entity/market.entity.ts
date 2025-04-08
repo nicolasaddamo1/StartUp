@@ -1,7 +1,7 @@
 import { Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
 import { Torneo } from "./tournaments.entity";
 
-@Entity('mercados')
+@Entity('mercado')
 export class Mercado {
   @PrimaryGeneratedColumn('uuid')
   id: string;

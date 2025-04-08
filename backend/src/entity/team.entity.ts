@@ -43,7 +43,7 @@ export class Equipo {
 
   @ManyToMany(() => Torneo)
   @JoinTable({
-    name: 'equipos_torneos',
+    name: 'equipo_torneo',
     joinColumn: { name: 'equipo_id', referencedColumnName: 'id' },
     inverseJoinColumn: { name: 'torneo_id', referencedColumnName: 'id' },
   })
