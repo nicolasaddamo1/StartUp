@@ -1,5 +1,5 @@
 // auth.service.ts
-import { Injectable, UnauthorizedException } from '@nestjs/common';
+import { Body, Injectable, UnauthorizedException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
@@ -27,7 +27,8 @@ export class AuthService {
         return null;
     }
 
-    async login(user: any) {
+    async login(@Body() email: string, password: string) {
+        const user = await this.validateUser(email, password);
         const payload = { email: user.email, sub: user.id };
 
         // Actualizar último login
