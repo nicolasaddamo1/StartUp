@@ -1,6 +1,7 @@
-import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from "typeorm";
+import { Column, Entity, JoinColumn, ManyToOne, OneToMany, PrimaryGeneratedColumn } from "typeorm";
 import { JugadorEquipo } from "./player-team.entity";
 import { Puntuacion } from "./points.entity";
+import { Club } from "./club.entity";
 
 export enum Posicion {
   ARQUERO = 'arquero',
@@ -19,9 +20,6 @@ export class Jugador {
 
   @Column({ type: 'enum', enum: Posicion })
   posicion: Posicion;
-
-  @Column({ length: 100 })
-  equipo_real: string;
 
   @Column({ type: 'decimal', precision: 10, scale: 2 })
   precio: number;
@@ -67,4 +65,11 @@ export class Jugador {
 
   @OneToMany(() => Puntuacion, puntuacion => puntuacion.jugador)
   puntuaciones: Puntuacion[];
+
+  @ManyToOne(() => Club)
+  @JoinColumn({ name: 'club_real_id' })
+  club_real: Club;
+
+  @Column()
+  club_real_id: string;
 }
