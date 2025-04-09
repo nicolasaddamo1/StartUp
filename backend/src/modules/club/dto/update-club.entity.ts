@@ -1,6 +1,6 @@
 import { IsOptional, IsString } from "class-validator";
 
-export class CreateClubDto {
+export class UpdateClubDto {
 
     @IsOptional()
     @IsString()
