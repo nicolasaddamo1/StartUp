@@ -2,6 +2,8 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Jugador } from 'src/entity/player.entity';
 import { Repository } from 'typeorm';
+import { CreatePlayerDto } from './dto/create-players.dto';
+import { UpdatePlayerDto } from './dto/update-players.dto';
 
 @Injectable()
 export class PlayerService {
@@ -20,12 +22,12 @@ export class PlayerService {
         return jugador;
     }
 
-    async createPlayer(player: Jugador): Promise<Jugador> {
+    async createPlayer(player: CreatePlayerDto): Promise<Jugador> {
         const newPlayer = this.playerRepository.create(player);
         return await this.playerRepository.save(newPlayer);
     }
 
-    async updatePlayer(id: string, player: Partial<Jugador>): Promise<Jugador> {
+    async updatePlayer(id: string, player: UpdatePlayerDto): Promise<Jugador> {
         const existingPlayer = await this.playerRepository.findOne({ where: { id } });
         if (!existingPlayer) throw new Error('Jugador no encontrado');
         Object.assign(existingPlayer, player);
