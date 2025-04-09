@@ -1,10 +1,12 @@
-import { Body, Controller, Delete, Get, Param, Post, Put } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Post, Put, UseGuards } from '@nestjs/common';
 import { ClubService } from './club.service';
 import { Club } from 'src/entity/club.entity';
 import { CreateClubDto } from './dto/create-club.entity';
 import { DeleteResult } from 'typeorm';
 import { UpdateClubDto } from './dto/update-club.entity';
+import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 
+@UseGuards(JwtAuthGuard)
 @Controller('club')
 export class ClubController {
     constructor(
