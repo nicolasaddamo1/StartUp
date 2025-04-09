@@ -1,4 +1,4 @@
-import { Controller, Delete, Get, Post, Put } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Post, Put } from '@nestjs/common';
 import { ClubService } from './club.service';
 import { Club } from 'src/entity/club.entity';
 import { CreateClubDto } from './dto/create-club.entity';
@@ -17,17 +17,17 @@ export class ClubController {
     }
 
     @Get(':id')
-    async findOne(id: string): Promise<Club> {
+    async findOne(@Param('id') id: string): Promise<Club> {
         return this.clubService.findOne(id);
     }
 
     @Post()
-    async create(club: CreateClubDto): Promise<Club> {
+    async create(@Body() club: CreateClubDto): Promise<Club> {
         return this.clubService.create(club);
     }
 
     @Put(':id')
-    async update(id: string, club: UpdateClubDto): Promise<Club> {
+    async update(@Param('id') id: string, @Body() club: UpdateClubDto): Promise<Club> {
         const clubToUpdate = await this.clubService.findOne(id);
         if (!clubToUpdate) throw new Error('El club no existe');
         if (clubToUpdate.id !== id) throw new Error('El id del club no coincide con el id de la URL');
@@ -35,7 +35,7 @@ export class ClubController {
     }
 
     @Delete(':id')
-    async delete(id: string): Promise<DeleteResult> {
+    async delete(@Param('id') id: string): Promise<DeleteResult> {
         if (!id) throw new Error('El id del club es obligatorio');
         const clubToDelete = await this.clubService.findOne(id);
         if (!clubToDelete) throw new Error('El club no existe');
