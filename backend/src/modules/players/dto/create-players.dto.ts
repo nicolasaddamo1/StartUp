@@ -1,30 +1,18 @@
-import { IsUUID, IsString, IsInt, IsBoolean } from 'class-validator';
+import { IsEnum, IsNotEmpty, IsNumber, IsString } from "class-validator";
+import { Posicion } from "src/entity/player.entity";
 
 export class CreatePlayerDto {
-    @IsString()
-    name: string;
-
-    @IsUUID()
-    teamId: string;
 
     @IsString()
-    position: string;
+    @IsNotEmpty({ message: 'El nombre es obligatorio' })
+    nombre: string;
 
-    @IsInt()
-    value: number;
+    @IsEnum(Posicion)
+    @IsNotEmpty({ message: 'La posicion es obligatoria' })
+    posicion: Posicion;
 
-    @IsInt()
-    goals: number;
+    @IsNotEmpty({ message: 'El precio es obligatorio' })
+    @IsNumber({ allowInfinity: false, allowNaN: false })
+    precio: number;
 
-    @IsInt()
-    assists: number;
-
-    @IsInt()
-    yellowCards: number;
-
-    @IsInt()
-    redCards: number;
-
-    @IsBoolean()
-    isInjured: boolean;
 }
