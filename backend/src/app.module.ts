@@ -18,6 +18,8 @@ import { EquipoTorneo } from './entity/team-tournaments.entity';
 import { Puntuacion } from './entity/points.entity';
 import { Notificacion } from './entity/notifications.entity';
 import { Fecha } from './entity/fecha.entity';
+import { ClubModule } from './modules/club/club.module';
+import { PlayerModule } from './modules/players/player.module';
 
 @Module({
   imports: [ConfigModule.forRoot(
@@ -39,7 +41,6 @@ import { Fecha } from './entity/fecha.entity';
       entities: [
         __dirname + '/**/*.entity{.ts,.js}'
       ],
-      // entities: [Usuario, UsuarioTorneo, Transaccion, Transferencia, Torneo, Equipo, EquipoTorneo, Puntuacion, Jugador, JugadorEquipo, Notificacion, Mercado, Fecha],
       synchronize: true,
       dropSchema: false,
       logging: true,
@@ -48,7 +49,9 @@ import { Fecha } from './entity/fecha.entity';
   }),
   TypeOrmModule.forFeature([Usuario]),
     AuthModule,
-    UsuariosModule
+    UsuariosModule,
+    ClubModule,
+    PlayerModule
   ],
   controllers: [AppController],
   providers: [AppService],
