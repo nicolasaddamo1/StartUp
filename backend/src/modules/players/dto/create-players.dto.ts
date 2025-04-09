@@ -15,4 +15,8 @@ export class CreatePlayerDto {
     @IsNumber({ allowInfinity: false, allowNaN: false })
     precio: number;
 
+
+    @IsNotEmpty({ message: 'El club es obligatorio' })
+    @IsString()
+    club: string;
 }
