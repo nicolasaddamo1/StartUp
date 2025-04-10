@@ -27,57 +27,10 @@ export class ClubService {
     ) { }
 
     async traerclubesAtravesdeApi() {
-        const axios = require('axios');
-
-        const API_KEY = '02ed2fdbe4f54dd08570fe1b354c87a2';
-        const API_URL = 'https://api.football-data.org/v4';
-
-        async function getArgentinianPlayers() {
-            try {
-                // 1. Obtener equipos de la liga argentina
-                const { data: teams } = await axios.get(`${API_URL}/competitions/2024/teams`, {
-                    headers: { 'X-Auth-Token': API_KEY }
-                });
-                console.log('Equipos encontrados:', teams);
-
-                // 2. Procesar cada equipo para obtener jugadores
-                const players: Player[] = [];
-
-                function isTeam(data: any): data is Team {
-                    return typeof data.id === 'number' &&
-                        typeof data.name === 'string' &&
-                        (data.squad === undefined || Array.isArray(data.squad));
-                }
-
-                function isPlayer(data: any): data is Player {
-                    return typeof data.id === 'number' &&
-                        typeof data.name === 'string';
-                }
-                for (const team of teams.teams) {
-                    // Algunas APIs incluyen jugadores aquí, otras requieren otro request
-                    if (team.squad && Array.isArray(team.squad)) {
-                        const validPlayers = team.squad.filter(isPlayer) as Player[];
-                        players.push(...validPlayers.map((p) => ({
-                            id: p.id,
-                            name: p.name,
-                            position: p.position,
-                            team: team.name
-                        })));
-                    }
-                }
-
-                return players;
-            } catch (error) {
-                console.error('Error:', error.response?.data || error.message);
-                return [];
-            }
-        }
-
-        // Uso
-        getArgentinianPlayers().then(players => {
-            console.log('Jugadores encontrados:', players.length);
-            console.log(players.slice(0, 5)); // Muestra los primeros 5
-        });
+        fetch("https://v3.football.api-sports.io/leagues", requestOptions)
+            .then(response => response.text())
+            .then(result => console.log(result))
+            .catch(error => console.log('error', error));
     }
 
     async findAll(): Promise<Club[]> {
