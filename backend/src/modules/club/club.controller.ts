@@ -18,6 +18,11 @@ export class ClubController {
         return this.clubService.findAll();
     }
 
+    @Get('traerclubes')
+    async traerclubesAtravesdeApi() {
+        return this.clubService.traerclubesAtravesdeApi();
+    }
+
     @Get(':id')
     async findOne(@Param('id') id: string): Promise<Club> {
         return this.clubService.findOne(id);

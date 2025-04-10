@@ -20,6 +20,7 @@ import { Notificacion } from './entity/notifications.entity';
 import { Fecha } from './entity/fecha.entity';
 import { ClubModule } from './modules/club/club.module';
 import { PlayerModule } from './modules/players/player.module';
+import { HttpModule } from '@nestjs/axios';
 
 @Module({
   imports: [ConfigModule.forRoot(
@@ -48,6 +49,7 @@ import { PlayerModule } from './modules/players/player.module';
     }),
   }),
   TypeOrmModule.forFeature([Usuario]),
+    HttpModule,
     AuthModule,
     UsuariosModule,
     ClubModule,
