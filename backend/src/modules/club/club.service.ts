@@ -5,6 +5,7 @@ import { DeleteResult, Repository } from 'typeorm';
 import { CreateClubDto } from './dto/create-club.entity';
 import { UpdateClubDto } from './dto/update-club.entity';
 import { HttpService } from '@nestjs/axios';
+import { ConfigService } from '@nestjs/config';
 
 interface Player {
     id: number;
@@ -27,10 +28,24 @@ export class ClubService {
     ) { }
 
     async traerclubesAtravesdeApi() {
-        fetch("https://v3.football.api-sports.io/leagues", requestOptions)
-            .then(response => response.text())
-            .then(result => console.log(result))
-            .catch(error => console.log('error', error));
+        var axios = require('axios');
+
+        var config = {
+            method: 'get',
+            url: 'https://v3.football.api-sports.io/leagues?id=128',
+            headers: {
+                'x-rapidapi-key': process.env.API_KEY,
+                'x-rapidapi-host': 'v3.football.api-sports.io'
+            }
+        };
+
+        axios(config)
+            .then(function (response) {
+                console.log(JSON.stringify(response.data));
+            })
+            .catch(function (error) {
+                console.log(error);
+            });
     }
 
     async findAll(): Promise<Club[]> {
