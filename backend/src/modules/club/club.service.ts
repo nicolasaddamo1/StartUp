@@ -4,8 +4,6 @@ import { Club } from 'src/entity/club.entity';
 import { DeleteResult, Repository } from 'typeorm';
 import { CreateClubDto } from './dto/create-club.entity';
 import { UpdateClubDto } from './dto/update-club.entity';
-import { HttpService } from '@nestjs/axios';
-import { ConfigService } from '@nestjs/config';
 
 interface Player {
     id: number;
@@ -24,7 +22,6 @@ export class ClubService {
 
         @InjectRepository(Club)
         private clubRepository: Repository<Club>,
-        private readonly httpService: HttpService,
     ) { }
 
     async traerclubesAtravesdeApi() {
@@ -32,7 +29,7 @@ export class ClubService {
 
         var config = {
             method: 'get',
-            url: 'https://v3.football.api-sports.io/leagues?id=128',
+            url: 'https://v3.football.api-sports.io/players?league=128&season=2023',
             headers: {
                 'x-rapidapi-key': process.env.API_KEY,
                 'x-rapidapi-host': 'v3.football.api-sports.io'
