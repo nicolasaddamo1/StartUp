@@ -31,7 +31,6 @@ export enum FormationEnum {
     [FormationEnum.FIVE_TWO_THREE]: { defenders: 5, midfielders: 2, forwards: 3 },
   };
   
-  // Validar que una string sea una formación válida
   export function isFormationValid(formation: string): formation is FormationEnum {
     return Object.values(FormationEnum).includes(formation as FormationEnum);
   }
