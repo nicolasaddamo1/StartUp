@@ -3,6 +3,7 @@ import { Usuario } from "./user.entity";
 import { Torneo } from "./tournaments.entity";
 import { JugadorEquipo } from "./player-team.entity";
 import { Jugador } from "./player.entity";
+import { FormationEnum } from "src/formations/formations.constants";
 
 @Entity('equipo')
 export class Equipo {
@@ -12,8 +13,12 @@ export class Equipo {
   @Column({ length: 100 })
   nombre: string;
 
-  @Column({ type: 'varchar', length: 50 })
-  formacion: string; // Ej: "4-3-3", "4-4-2"
+  @Column({
+    type: 'enum',
+    enum: FormationEnum,
+    default:FormationEnum.FOUR_FOUR_TWO,
+  })
+  formacion: FormationEnum;
 
   @Column({ type: 'decimal', precision: 10, scale: 2, default: 100.00 })
   presupuesto_restante: number;
