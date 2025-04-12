@@ -21,6 +21,7 @@ import { Fecha } from './entity/fecha.entity';
 import { ClubModule } from './modules/club/club.module';
 import { PlayerModule } from './modules/players/player.module';
 import { HttpModule } from '@nestjs/axios';
+import { EquipoModule } from './modules/teams/teams.module';
 
 @Module({
   imports: [ConfigModule.forRoot(
@@ -49,6 +50,7 @@ import { HttpModule } from '@nestjs/axios';
     }),
   }),
   TypeOrmModule.forFeature([Usuario]),
+    EquipoModule,
     HttpModule,
     AuthModule,
     UsuariosModule,

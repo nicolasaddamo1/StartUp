@@ -10,4 +10,4 @@ imports:[TypeOrmModule.forFeature([Equipo, Jugador])],
 controllers:[EquipoController],
 providers:[EquipoService]
 })
-export class EquioModule{}
+export class EquipoModule { }
