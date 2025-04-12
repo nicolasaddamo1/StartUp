@@ -29,4 +29,24 @@ export class EquipoService {
   getFormationStructure(formation: FormationEnum): FormationStructure {
     return FormationMap[formation];
   }
+  // src/equipo/equipo.service.ts
+async validateTeamPlayers(equipoId: string): Promise<boolean> {
+    const equipo = await this.equipoRepository.findOne({
+      where: { id: equipoId },
+      relations: ['jugadores_equipo', 'jugadores_equipo.jugador'],
+    });
+    if (!equipo)throw new Error('Equipo no encontrado')
+    const formationStructure = await this.getFormationStructure(equipo.formacion);
+    const playersByPosition = {
+      defenders: equipo.jugadores_equipo.filter(j => j.jugador.posicion === 'defensor').length,
+      midfielders: equipo.jugadores_equipo.filter(j => j.jugador.posicion === 'mediocampista').length,
+      forwards: equipo.jugadores_equipo.filter(j => j.jugador.posicion === 'delantero').length,
+    };
+  
+    return (
+      playersByPosition.defenders === formationStructure.defenders &&
+      playersByPosition.midfielders === formationStructure.midfielders &&
+      playersByPosition.forwards === formationStructure.forwards
+    );
+  }
 }
