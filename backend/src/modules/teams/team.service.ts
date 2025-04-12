@@ -4,12 +4,15 @@ import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Equipo } from 'src/entity/team.entity';
 import { FormationEnum, FormationMap, FormationStructure, isFormationValid } from 'src/formations/formations.constants';
+import { Jugador } from 'src/entity/player.entity';
 
 @Injectable()
 export class EquipoService {
   constructor(
     @InjectRepository(Equipo)
     private equipoRepository: Repository<Equipo>,
+    @InjectRepository(Jugador)
+    private jugadorRepository: Repository<Jugador>,
   ) {}
 
   // Cambiar formación de un equipo (con validación)
