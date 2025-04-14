@@ -32,13 +32,17 @@ export class EquipoController {
     return this.equipoService.updateFormation(id, formation);
   }
 
-  @Put(':id/team')
+  @Put(':equipoId/team')
   async updateTeam(
-    @Body() jugadorId:string, equipoId:string
+    @Param('equipoId')equipoId:string,
+    @Body('jugadorId') jugadorId:string
   ):Promise<any>
   {
     if(!jugadorId || !equipoId)throw new Error('Campos Obligatorios.')
-      return this.equipoService.updateTeam(jugadorId,equipoId)
+    
+      console.log('Tipo de jugadorId:', typeof jugadorId, 'Valor:', jugadorId);
+
+      return this.equipoService.updateTeam(equipoId, jugadorId)
   }
 
     

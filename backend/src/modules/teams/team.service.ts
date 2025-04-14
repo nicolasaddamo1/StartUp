@@ -10,7 +10,7 @@ import { Usuario } from 'src/entity/user.entity';
 import { EstadoJugador, JugadorEquipo } from 'src/entity/player-team.entity';
 
 @Injectable()
-export class EquipoService {
+export class  EquipoService {
   constructor(
     @InjectRepository(Equipo)
     private equipoRepository: Repository<Equipo>,
@@ -74,7 +74,7 @@ async validateTeamPlayers(equipoId: string): Promise<boolean> {
     );
   }
 
-  async updateTeam(jugadorId: string, equipoId: string) {
+  async updateTeam(equipoId: string, jugadorId:string) {
     // 1. Obtener equipo con relaciones
     const equipo = await this.equipoRepository.findOne({
       where: { id: equipoId },
@@ -87,7 +87,7 @@ async validateTeamPlayers(equipoId: string): Promise<boolean> {
     if (!jugador) throw new Error('Jugador no encontrado');
   
     // 3. Validar presupuesto
-    if (equipo.presupuesto_restante < jugador.precio) {
+    if (Number(equipo.presupuesto_restante) < Number(jugador.precio)) {
       throw new Error('Presupuesto insuficiente');
     }
   
@@ -154,5 +154,76 @@ async validateTeamPlayers(equipoId: string): Promise<boolean> {
     });
   
     return { success: true, nuevoPresupuesto: equipo.presupuesto_restante };
+  }
+
+  async agregarSuplente(equipoId: string, jugadorId: string) {
+    // 1. Obtener equipo con relaciones
+    const equipo = await this.equipoRepository.findOne({
+      where: { id: equipoId },
+      relations: ['jugadores_equipo', 'jugadores_equipo.jugador'],
+    });
+    if (!equipo) throw new Error('Equipo no encontrado');
+  
+    // 2. Obtener jugador
+    const jugador = await this.jugadorRepository.findOneBy({ id: jugadorId });
+    if (!jugador) throw new Error('Jugador no encontrado');
+  
+    // 3. Validar presupuesto (igual que antes)
+    if (Number(equipo.presupuesto_restante) < Number(jugador.precio)) {
+      throw new Error('Presupuesto insuficiente');
+    }
+  
+    // 4. Validar jugador único (ya sea titular o suplente)
+    const jugadorYaEnEquipo = equipo.jugadores_equipo.some(
+      je => je.jugador.id === jugadorId
+    );
+    if (jugadorYaEnEquipo) {
+      throw new Error('Este jugador ya está en el equipo');
+    }
+  
+    // 5. Validar límites de suplentes
+    const suplentesActuales = equipo.jugadores_equipo.filter(
+      je => je.estado === EstadoJugador.SUPLENTE
+    );
+  
+    // 5.1 Máximo 3 suplentes
+    if (suplentesActuales.length >= 3) {
+      throw new Error('Máximo de suplentes alcanzado (3)');
+    }
+  
+    // 5.2 Solo 1 suplente por posición
+    const suplenteExistenteEnPosicion = suplentesActuales.some(
+      s => s.jugador.posicion === jugador.posicion
+    );
+    if (suplenteExistenteEnPosicion) {
+      throw new Error(`Ya tienes un suplente en la posición ${jugador.posicion}`);
+    }
+  
+    // 6. Crear y guardar la nueva relación como SUPLENTE
+    const nuevaRelacion = this.jugadorEquipoRepository.create({
+      equipo: { id: equipo.id },
+      jugador: { id: jugador.id },
+      precio_compra: jugador.precio,
+      estado: EstadoJugador.SUPLENTE // Estado diferente!
+    });
+  
+    // 7. Actualizar presupuesto
+    equipo.presupuesto_restante = Number(equipo.presupuesto_restante) - Number(jugador.precio);
+  
+    // 8. Guardar en transacción
+    await this.equipoRepository.manager.transaction(async manager => {
+      await manager.save(JugadorEquipo, nuevaRelacion);
+      await manager.update(
+        Equipo, 
+        { id: equipoId },
+        { presupuesto_restante: equipo.presupuesto_restante }
+      );
+    });
+  
+    return { 
+      success: true, 
+      nuevoPresupuesto: equipo.presupuesto_restante,
+      estado: EstadoJugador.SUPLENTE
+    };
   }
 } 
