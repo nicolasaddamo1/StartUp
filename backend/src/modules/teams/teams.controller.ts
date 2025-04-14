@@ -3,6 +3,7 @@ import { Controller, Put, Param, Body, Post } from '@nestjs/common';
 import { FormationEnum } from 'src/formations/formations.constants';
 import { EquipoService } from './team.service';
 import { CreateUserTeamDto } from './folder/user-team.dto';
+import e from 'express';
 
 @Controller('equipos')
 export class EquipoController {
@@ -25,6 +26,15 @@ export class EquipoController {
     @Body('formation') formation: FormationEnum,
   ) {
     return this.equipoService.updateFormation(id, formation);
+  }
+
+  @Put(':id/team')
+  async updateTeam(
+    @Body() jugadorId:string, equipoId:string
+  ):Promise<any>
+  {
+    if(!jugadorId || !equipoId)throw new Error('Campos Obligatorios.')
+      return this.equipoService.updateTeam(jugadorId,equipoId)
   }
 
     
