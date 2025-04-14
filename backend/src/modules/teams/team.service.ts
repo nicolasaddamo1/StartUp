@@ -157,23 +157,19 @@ async validateTeamPlayers(equipoId: string): Promise<boolean> {
   }
 
   async agregarSuplente(equipoId: string, jugadorId: string) {
-    // 1. Obtener equipo con relaciones
     const equipo = await this.equipoRepository.findOne({
       where: { id: equipoId },
       relations: ['jugadores_equipo', 'jugadores_equipo.jugador'],
     });
     if (!equipo) throw new Error('Equipo no encontrado');
   
-    // 2. Obtener jugador
     const jugador = await this.jugadorRepository.findOneBy({ id: jugadorId });
     if (!jugador) throw new Error('Jugador no encontrado');
   
-    // 3. Validar presupuesto (igual que antes)
     if (Number(equipo.presupuesto_restante) < Number(jugador.precio)) {
       throw new Error('Presupuesto insuficiente');
     }
   
-    // 4. Validar jugador único (ya sea titular o suplente)
     const jugadorYaEnEquipo = equipo.jugadores_equipo.some(
       je => je.jugador.id === jugadorId
     );
@@ -181,17 +177,14 @@ async validateTeamPlayers(equipoId: string): Promise<boolean> {
       throw new Error('Este jugador ya está en el equipo');
     }
   
-    // 5. Validar límites de suplentes
     const suplentesActuales = equipo.jugadores_equipo.filter(
       je => je.estado === EstadoJugador.SUPLENTE
     );
   
-    // 5.1 Máximo 3 suplentes
     if (suplentesActuales.length >= 3) {
       throw new Error('Máximo de suplentes alcanzado (3)');
     }
   
-    // 5.2 Solo 1 suplente por posición
     const suplenteExistenteEnPosicion = suplentesActuales.some(
       s => s.jugador.posicion === jugador.posicion
     );
@@ -199,18 +192,15 @@ async validateTeamPlayers(equipoId: string): Promise<boolean> {
       throw new Error(`Ya tienes un suplente en la posición ${jugador.posicion}`);
     }
   
-    // 6. Crear y guardar la nueva relación como SUPLENTE
     const nuevaRelacion = this.jugadorEquipoRepository.create({
       equipo: { id: equipo.id },
       jugador: { id: jugador.id },
       precio_compra: jugador.precio,
-      estado: EstadoJugador.SUPLENTE // Estado diferente!
+      estado: EstadoJugador.SUPLENTE 
     });
   
-    // 7. Actualizar presupuesto
     equipo.presupuesto_restante = Number(equipo.presupuesto_restante) - Number(jugador.precio);
   
-    // 8. Guardar en transacción
     await this.equipoRepository.manager.transaction(async manager => {
       await manager.save(JugadorEquipo, nuevaRelacion);
       await manager.update(
