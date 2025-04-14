@@ -11,7 +11,7 @@ export class EquipoController {
   async createTeam( @Body('name')
     name:string
   ){
-    return this.equipoService.createFormation(name);
+    return this.equipoService.createSquad(name);
   }
   @Put(':id/formation')
   async updateFormation(
