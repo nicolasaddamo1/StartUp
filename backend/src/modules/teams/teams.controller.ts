@@ -12,7 +12,7 @@ export class EquipoController {
   async createTeam( @Body('team')
     team:CreateUserTeamDto
   ){
-    if(!team.teamName || !team.userId)throw new Error('Campos Obligatorios.')
+    if(!team.nombre || !team.usuario_id)throw new Error('Campos Obligatorios.')
     return this.equipoService.createSquad(team);
   }
   @Put(':id/formation')

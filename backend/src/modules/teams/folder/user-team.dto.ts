@@ -2,10 +2,10 @@ import { IsNotEmpty, IsUUID, IsString, IsInt, Min } from 'class-validator';
 
 export class CreateUserTeamDto {
     @IsUUID()
-    userId: string;
+    usuario_id: string;
 
     @IsString()
     @IsNotEmpty()
-    teamName: string;
+    nombre: string;
 
 }

@@ -18,8 +18,8 @@ export class EquipoService {
   ) {}
   async createSquad(team:CreateUserTeamDto):Promise<Equipo>{
     const savedSquad = await this.equipoRepository.create(
-  {    nombre: team.teamName,
-      usuario_id: team.userId}
+  {    nombre: team.nombre,
+      usuario_id: team.usuario_id}
     )
     return await this.equipoRepository.save(savedSquad)
   }
