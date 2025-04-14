@@ -49,7 +49,8 @@ import { EquipoModule } from './modules/teams/teams.module';
       autoLoadEntities: false,
     }),
   }),
-  TypeOrmModule.forFeature([Usuario]),
+  TypeOrmModule.forFeature([Usuario, Equipo, Jugador]),
+
     EquipoModule,
     HttpModule,
     AuthModule,
