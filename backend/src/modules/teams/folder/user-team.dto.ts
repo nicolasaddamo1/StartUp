@@ -8,7 +8,4 @@ export class CreateUserTeamDto {
     @IsNotEmpty()
     teamName: string;
 
-    @IsInt()
-    @Min(0)
-    budget: number;
 }
