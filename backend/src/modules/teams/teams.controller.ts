@@ -44,6 +44,18 @@ export class EquipoController {
 
       return this.equipoService.updateTeam(equipoId, jugadorId)
   }
+  @Put(':equipoId/banchwarmers')
+  async banchwarmers(
+    @Param('equipoId')equipoId:string,
+    @Body('jugadorId') jugadorId:string
+  ):Promise<any>
+  {
+    if(!jugadorId || !equipoId)throw new Error('Campos Obligatorios.')
+    
+      console.log('Tipo de jugadorId:', typeof jugadorId, 'Valor:', jugadorId);
+
+      return this.equipoService.agregarSuplente(equipoId, jugadorId)
+  }
 
     
 }
