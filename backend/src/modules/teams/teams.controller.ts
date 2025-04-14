@@ -9,11 +9,15 @@ export class EquipoController {
   constructor(private readonly equipoService: EquipoService) {}
 
   @Post('team')
-  async createTeam( @Body('team')
+  async createTeam( @Body()
     team:CreateUserTeamDto
   ){
     if(!team.nombre || !team.usuario_id)throw new Error('Campos Obligatorios.')
-    return this.equipoService.createSquad(team);
+    
+    console.log( 'nombre: ', team.nombre)
+    console.log( 'usuario_id: ', team.usuario_id)
+
+    return await this.equipoService.createSquad(team);
   }
   @Put(':id/formation')
   async updateFormation(

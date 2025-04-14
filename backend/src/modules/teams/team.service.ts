@@ -1,5 +1,5 @@
 // src/equipo/equipo.service.ts
-import { Injectable } from '@nestjs/common';
+import { Inject, Injectable } from '@nestjs/common';
 import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Equipo } from 'src/entity/team.entity';
@@ -15,13 +15,18 @@ export class EquipoService {
     private equipoRepository: Repository<Equipo>,
     @InjectRepository(Jugador)
     private jugadorRepository: Repository<Jugador>,
+    @InjectRepository(Usuario)
+    private usuarioRepository: Repository<Usuario>
   ) {}
   async createSquad(team:CreateUserTeamDto):Promise<Equipo>{
-    const savedSquad = await this.equipoRepository.create(
+    const validateUser= await this. usuarioRepository.findOne({where:{id:team.usuario_id}})
+    if (!validateUser)throw new Error('Usuario no encontrado.')
+      
+    const savedSquad = await this.equipoRepository.save(
   {    nombre: team.nombre,
       usuario_id: team.usuario_id}
     )
-    return await this.equipoRepository.save(savedSquad)
+    return savedSquad
   }
   // Cambiar formación de un equipo (con validación)
   async updateFormation(equipoId: string, newFormation: FormationEnum): Promise<Equipo> {
