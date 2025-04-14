@@ -21,6 +21,11 @@ export class EquipoService {
     @InjectRepository(JugadorEquipo)
     private jugadorEquipoRepository: Repository<JugadorEquipo>
   ) {}
+
+  async getAllTeams():Promise<Equipo[]>{
+    return await this.equipoRepository.find()
+  }
+
   async createSquad(team:CreateUserTeamDto):Promise<Equipo>{
     const validateUser= await this. usuarioRepository.findOne({where:{id:team.usuario_id}})
     if (!validateUser)throw new Error('Usuario no encontrado.')

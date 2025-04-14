@@ -1,13 +1,17 @@
 // src/equipo/equipo.controller.ts
-import { Controller, Put, Param, Body, Post } from '@nestjs/common';
+import { Controller, Put, Param, Body, Post, Get } from '@nestjs/common';
 import { FormationEnum } from 'src/formations/formations.constants';
 import { EquipoService } from './team.service';
 import { CreateUserTeamDto } from './folder/user-team.dto';
-import e from 'express';
+import { Equipo } from 'src/entity/team.entity';
 
 @Controller('equipos')
 export class EquipoController {
   constructor(private readonly equipoService: EquipoService) {}
+  @Get()
+  async getAllTeams():Promise<Equipo[]>{
+    return this.equipoService.getAllTeams()
+  }
 
   @Post('team')
   async createTeam( @Body()
