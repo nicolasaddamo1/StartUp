@@ -36,7 +36,6 @@ export class  EquipoService {
     )
     return savedSquad
   }
-  // Cambiar formación de un equipo (con validación)
   async updateFormation(equipoId: string, newFormation: FormationEnum): Promise<Equipo> {
     if (!isFormationValid(newFormation)) {
       throw new Error('Formación no válida');
@@ -49,11 +48,9 @@ export class  EquipoService {
     return this.equipoRepository.save(equipo);
   }
 
-  // Obtener estructura de la formación (defensas, mediocampistas, etc.)
   getFormationStructure(formation: FormationEnum): FormationStructure {
     return FormationMap[formation];
   }
-  // src/equipo/equipo.service.ts
 async validateTeamPlayers(equipoId: string): Promise<boolean> {
     const equipo = await this.equipoRepository.findOne({
       where: { id: equipoId },
@@ -75,23 +72,19 @@ async validateTeamPlayers(equipoId: string): Promise<boolean> {
   }
 
   async updateTeam(equipoId: string, jugadorId:string) {
-    // 1. Obtener equipo con relaciones
     const equipo = await this.equipoRepository.findOne({
       where: { id: equipoId },
       relations: ['jugadores_equipo', 'jugadores_equipo.jugador'],
     });
     if (!equipo) throw new Error('Equipo no encontrado');
   
-    // 2. Obtener jugador
     const jugador = await this.jugadorRepository.findOneBy({ id: jugadorId });
     if (!jugador) throw new Error('Jugador no encontrado');
   
-    // 3. Validar presupuesto
     if (Number(equipo.presupuesto_restante) < Number(jugador.precio)) {
       throw new Error('Presupuesto insuficiente');
     }
   
-    // 4. Validar jugador único
     const jugadorYaEnEquipo = equipo.jugadores_equipo.some(
       je => je.jugador.id === jugadorId
     );
@@ -99,7 +92,6 @@ async validateTeamPlayers(equipoId: string): Promise<boolean> {
       throw new Error('Este jugador ya está en el equipo');
     }
   
-    // 5. Validar posición según formación
     const formacion = FormationMap[equipo.formacion];
     const conteoPorPosicion = {
       defensores: equipo.jugadores_equipo.filter(j => j.jugador.posicion === 'defensor').length,
@@ -108,7 +100,6 @@ async validateTeamPlayers(equipoId: string): Promise<boolean> {
       arqueros: equipo.jugadores_equipo.filter(j => j.jugador.posicion === 'arquero').length,
     };
   
-    // Validaciones por posición
     switch (jugador.posicion) {
       case 'defensor':
         if (conteoPorPosicion.defensores >= formacion.defenders) {
@@ -132,18 +123,15 @@ async validateTeamPlayers(equipoId: string): Promise<boolean> {
         break;
     }
   
-    // 6. Crear y guardar la nueva relación
     const nuevaRelacion = this.jugadorEquipoRepository.create({
-      equipo: { id: equipo.id }, // Referencia por ID para evitar cargar toda la entidad
+      equipo: { id: equipo.id }, 
       jugador: { id: jugador.id },
       precio_compra: jugador.precio,
       estado: EstadoJugador.TITULAR
     });
   
-    // 7. Actualizar presupuesto
     equipo.presupuesto_restante = Number(equipo.presupuesto_restante) - Number(jugador.precio);
   
-    // 8. Guardar todo en una transacción
     await this.equipoRepository.manager.transaction(async manager => {
       await manager.save(JugadorEquipo, nuevaRelacion);
       await manager.update(
