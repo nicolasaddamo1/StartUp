@@ -5,7 +5,6 @@ import { Equipo } from "./team.entity";
 export enum EstadoJugador {
   TITULAR = 'titular',
   SUPLENTE = 'suplente',
-  RESERVA = 'reserva'
 }
 
 @Entity('jugador_equipo')

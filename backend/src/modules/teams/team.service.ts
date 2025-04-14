@@ -7,6 +7,8 @@ import { FormationEnum, FormationMap, FormationStructure, isFormationValid } fro
 import { Jugador } from 'src/entity/player.entity';
 import { CreateUserTeamDto } from './folder/user-team.dto';
 import { Usuario } from 'src/entity/user.entity';
+import { identity } from 'rxjs';
+import { JugadorEquipo } from 'src/entity/player-team.entity';
 
 @Injectable()
 export class EquipoService {
@@ -16,12 +18,14 @@ export class EquipoService {
     @InjectRepository(Jugador)
     private jugadorRepository: Repository<Jugador>,
     @InjectRepository(Usuario)
-    private usuarioRepository: Repository<Usuario>
+    private usuarioRepository: Repository<Usuario>,
+    @InjectRepository(JugadorEquipo)
+    private jugadoreEquipoRepository: Repository<JugadorEquipo>
   ) {}
   async createSquad(team:CreateUserTeamDto):Promise<Equipo>{
     const validateUser= await this. usuarioRepository.findOne({where:{id:team.usuario_id}})
     if (!validateUser)throw new Error('Usuario no encontrado.')
-      
+
     const savedSquad = await this.equipoRepository.save(
   {    nombre: team.nombre,
       usuario_id: team.usuario_id}
@@ -65,4 +69,50 @@ async validateTeamPlayers(equipoId: string): Promise<boolean> {
       playersByPosition.forwards === formationStructure.forwards
     );
   }
-}
+  async updateTeam(jugadorId:string, equipoId:string){
+    const equipo = await this.equipoRepository.findOne({
+      where:{id:equipoId},
+      relations: ['jugadores_equipo', 'jugadores_equipo.jugador'],
+    });
+    if (!equipo)throw new Error('Equipo no encontrado.')
+
+    const jugador = await this.jugadorRepository.findOneBy({id:jugadorId})
+    if(!jugador) throw new Error('Jugador no encontrado')
+    
+    if (equipo?.presupuesto_restante < jugador.precio)throw new Error('Presupuesto insuficiente')
+
+    const formacion = FormationMap[equipo.formacion]
+    const jugadoresActuales = equipo.jugadores_equipo
+
+    const conteoPorPosicion = {
+      defensores:jugadoresActuales.filter(j=>j.jugador.posicion === 'defensor').length,
+      mediocampistas:jugadoresActuales.filter(j=>j.jugador.posicion === 'mediocampista').length,
+      delanteros:jugadoresActuales.filter(j=>j.jugador.posicion === 'delantero').length,
+      arquero:jugadoresActuales.filter(j=>j.jugador.posicion === 'arquero').length,
+    }
+
+    if (jugador.posicion === 'defensor' && conteoPorPosicion.defensores>=formacion.defenders){
+      throw new Error('Maximo de defensores alcanzado')
+    }
+    if (jugador.posicion === 'delantero' && conteoPorPosicion.delanteros>=formacion.forwards){
+      throw new Error('Maximo de delanteros alcanzado')
+    }
+    if (jugador.posicion === 'mediocampista' && conteoPorPosicion.mediocampistas>=formacion.midfielders){
+      throw new Error('Maximo de mediocampistas alcanzado')
+    }
+    if (jugador.posicion === 'arquero' && conteoPorPosicion.arquero>= 1){
+      throw new Error('Arquero ya seleccionado')
+    }
+
+    const nuevaRelacion = this.jugadoreEquipoRepository.create({
+      equipo,
+      jugador,
+      precio_compra:jugador.precio
+    })
+    equipo.presupuesto_restante -= jugador.precio;
+    await this.jugadoreEquipoRepository.save(nuevaRelacion);
+
+    return this.equipoRepository.save(equipo);
+
+  }
+} 
