@@ -5,6 +5,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Equipo } from 'src/entity/team.entity';
 import { FormationEnum, FormationMap, FormationStructure, isFormationValid } from 'src/formations/formations.constants';
 import { Jugador } from 'src/entity/player.entity';
+import { CreateUserTeamDto } from './folder/user-team.dto';
 
 @Injectable()
 export class EquipoService {
@@ -14,7 +15,10 @@ export class EquipoService {
     @InjectRepository(Jugador)
     private jugadorRepository: Repository<Jugador>,
   ) {}
-
+  async createSquad(team:CreateUserTeamDto):Promise<Equipo>{
+    const savedSquad= this.equipoRepository.create(name)
+    return 
+  }
   // Cambiar formación de un equipo (con validación)
   async updateFormation(equipoId: string, newFormation: FormationEnum): Promise<Equipo> {
     if (!isFormationValid(newFormation)) {
