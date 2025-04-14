@@ -6,6 +6,7 @@ import { Equipo } from 'src/entity/team.entity';
 import { FormationEnum, FormationMap, FormationStructure, isFormationValid } from 'src/formations/formations.constants';
 import { Jugador } from 'src/entity/player.entity';
 import { CreateUserTeamDto } from './folder/user-team.dto';
+import { Usuario } from 'src/entity/user.entity';
 
 @Injectable()
 export class EquipoService {
@@ -16,8 +17,11 @@ export class EquipoService {
     private jugadorRepository: Repository<Jugador>,
   ) {}
   async createSquad(team:CreateUserTeamDto):Promise<Equipo>{
-    const savedSquad= this.equipoRepository.create(name)
-    return 
+    const savedSquad = await this.equipoRepository.create(
+  {    nombre: team.teamName,
+      usuario_id: team.userId}
+    )
+    return await this.equipoRepository.save(savedSquad)
   }
   // Cambiar formación de un equipo (con validación)
   async updateFormation(equipoId: string, newFormation: FormationEnum): Promise<Equipo> {
