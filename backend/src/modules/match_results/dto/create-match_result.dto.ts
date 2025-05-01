@@ -1,35 +1,23 @@
-// src/modules/match_results/dto/create-match_result.dto.ts
-import { IsUUID, IsInt, Min, IsOptional } from 'class-validator';
+import { IsNumber, IsString, IsUUID } from "class-validator";
 
 export class CreateMatchResultDto {
-    @IsUUID()
-    matchId: string;
+
+    @IsNumber()
+    goalsLocal: number;
+
+    @IsNumber()
+    goalsVisit: number;
+
+    @IsString()
+    winner: string;
 
     @IsUUID()
-    playerId: string;
+    partidoId: string;
 
-    @IsOptional()
-    @IsInt()
-    @Min(0)
-    goals?: number;
+    @IsUUID()
+    equipoLocalId: string;
 
-    @IsOptional()
-    @IsInt()
-    @Min(0)
-    assists?: number;
+    @IsUUID()
+    equipoVisitanteId: string;
 
-    @IsOptional()
-    @IsInt()
-    @Min(0)
-    yellowCards?: number;
-
-    @IsOptional()
-    @IsInt()
-    @Min(0)
-    redCards?: number;
-
-    @IsOptional()
-    @IsInt()
-    points?: number;
 }
-
