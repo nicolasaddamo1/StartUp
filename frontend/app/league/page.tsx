@@ -1,3 +1,7 @@
+import { LeagueCard } from "@/components/league-card"
+import useUser from "@/hooks/useUser"
+import { useState } from "react"
+
 // Ligas y torneos 
 const { user } = useUser()
 const { data: leagues, isLoading } = useLeague()
