@@ -1,29 +1,25 @@
-/*************  ✨ Windsurf Command ⭐  *************/
-import { useEffect, useState } from 'react';
-import { useRouter } from 'next/router';
+import { useRouter } from "next/router";
+import { useEffect, useState } from "react";
 
-export type User = {
+interface User {
     id: string;
     email: string;
-    name: string;
-    image: string;
-};
+    name?: string;
+}
 
-export const useOauth = () => {
+
+function useOAuth() {
     const router = useRouter();
     const [user, setUser] = useState<User | null>(null);
     const [error, setError] = useState<string | null>(null);
-
     useEffect(() => {
         const url = new URL(window.location.href);
         const token = url.searchParams.get('token');
-
         if (token) {
             localStorage.setItem('token', token);
             router.push('/');
         }
     }, [router]);
-
     const login = async (provider: string, data: { email: string; password: string }) => {
         try {
             const res = await fetch(`/api/oauth/${provider}`, {
@@ -33,7 +29,6 @@ export const useOauth = () => {
                 },
                 body: JSON.stringify(data),
             });
-
             if (res.status === 200) {
                 const user = (await res.json()) as User;
                 setUser(user);
@@ -47,17 +42,16 @@ export const useOauth = () => {
             setError('Error al intentar autenticar');
         }
     };
-
     const logout = () => {
         localStorage.removeItem('token');
         setUser(null);
     };
-
     return {
         user,
         error,
         login,
         logout,
     };
-};
-/*******  6f606661-b02f-407e-b5c1-edd02b4d5ea7  *******/
+}
+
+export default useOAuth;
