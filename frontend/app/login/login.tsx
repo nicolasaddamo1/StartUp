@@ -1,13 +1,13 @@
 /*************  ✨ Windsurf Command ⭐  *************/
 import { useState } from 'react';
 import { useRouter } from 'next/router';
-import { useOauth } from '../lib/use0auth';
+import useOAuth from '../lib/use0auth';
 
 export default function Login() {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const router = useRouter();
-    const { login } = useOauth();
+    const { login } = useOAuth();
 
     const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
