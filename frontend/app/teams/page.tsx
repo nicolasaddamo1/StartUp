@@ -1,9 +1,14 @@
+import { useTeams } from "@/hooks/useTeams";
+import useUser from "@/hooks/useUser";
+import { Team } from "@/types/teams";
+import { useEffect, useState } from "react";
+import { TeamCard } from "./teamCard";
+
 // Crear equipos
-/*************  ✨ Windsurf Command ⭐  *************/
 const TeamsPage = () => {
     const { user } = useUser()
-    const teamsResponse: { data: Team[]; isLoading: boolean } = useTeams(user?.id || "") || { data: [], isLoading: false }
-    const teams = teamsResponse?.data || []
+    const teamsResponse: { teams: Team[]; isLoading: boolean } = useTeams(user?.id || "") || { teams: [], isLoading: false }
+    const teams = teamsResponse?.teams || []
     const isLoading = teamsResponse?.isLoading || false
     const [teamsFiltered, setTeamsFiltered] = useState(teams)
     useEffect(() => {
@@ -26,4 +31,3 @@ const TeamsPage = () => {
         </div>
     )
 }
-/*******  1e539f10-9a7b-4c39-b077-343088fd9d26  *******/
