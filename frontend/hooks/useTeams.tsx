@@ -1,9 +1,7 @@
+import { Team } from '@/types/teams';
 import { useState, useEffect } from 'react';
 
-type Team = {
-    id: string;
-    name: string;
-};
+
 
 export function useTeams(ownerId?: string) {
     const [teams, setTeams] = useState<Team[]>([]);
