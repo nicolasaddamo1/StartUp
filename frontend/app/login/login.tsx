@@ -1,4 +1,3 @@
-/*************  ✨ Windsurf Command ⭐  *************/
 import { useState } from 'react';
 import { useRouter } from 'next/router';
 import useOAuth from '../lib/use0auth';
