@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react'
 import useUser from '@/hooks/useUser'
 import { useRouter } from 'next/router'
-import { Avatar, Button, Card, CardContent, CardHeader, Grid, Typography } from '@mui/joy'
+import { Avatar, Button, Card, CardContent, Typography, Grid } from '@mui/joy'
 import { useTheme } from '@mui/joy/styles'
 
 export default function ProfilePage() {
@@ -34,10 +34,12 @@ export default function ProfilePage() {
     }
 
     return (
-        <Grid container spacing={2}>
-            <Grid item xs={12}>
+        <Grid xs={12} component="div">
+            <Grid xs={12} component="div">
                 <Card variant="outlined">
-                    <CardHeader title={user.name} />
+                    <Typography level="h4" sx={{ mb: 2 }}>
+                        {user.name}
+                    </Typography>
                     <CardContent>
                         <Avatar src={user.avatar} />
                         <Typography level="h2" sx={{ mt: 2 }}>
