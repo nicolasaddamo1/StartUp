@@ -1,6 +1,5 @@
 import { useState, useEffect } from 'react'
 import useUser from '@/hooks/useUser'
-import { Usuario } from '@/types/user'
 import { useRouter } from 'next/router'
 import { Avatar, Button, Card, CardContent, CardHeader, Grid, Typography } from '@mui/joy'
 import { useTheme } from '@mui/joy/styles'
