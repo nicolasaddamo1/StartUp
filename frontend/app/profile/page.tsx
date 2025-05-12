@@ -3,6 +3,7 @@ import useUser from '@/hooks/useUser'
 import { useRouter } from 'next/router'
 import { Avatar, Button, Card, CardContent, Typography, Grid } from '@mui/joy'
 import { useTheme } from '@mui/joy/styles'
+import { CardHeader } from '@mui/material'
 
 export default function ProfilePage() {
     const { user } = useUser()
@@ -36,6 +37,15 @@ export default function ProfilePage() {
     return (
         <Grid xs={12} component="div">
             <Grid xs={12} component="div">
+                <CardHeader>
+                    <Typography level="h3">Mi perfil</Typography>
+
+                    <Button>
+                        <Typography level="h3" sx={{ mr: 1 }}>
+                            Mis equipos
+                        </Typography>
+                    </Button>
+                </CardHeader>
                 <Card variant="outlined">
                     <Typography level="h4" sx={{ mb: 2 }}>
                         {user.name}
